@@ -28,95 +28,176 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.leftCopyButton = new System.Windows.Forms.Button();
-            this.leftMoveButton = new System.Windows.Forms.Button();
-            this.leftDeleteButton = new System.Windows.Forms.Button();
-            this.leftFolderLabel = new System.Windows.Forms.Label();
-            this.leftFileBrowserButton = new System.Windows.Forms.Button();
-            this.leftFolderName = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.LeftCopyButton = new System.Windows.Forms.Button();
+            this.LeftMoveButton = new System.Windows.Forms.Button();
+            this.LeftDeleteButton = new System.Windows.Forms.Button();
+            this.LeftFolderLabel = new System.Windows.Forms.Label();
+            this.LeftFolderBrowserButton = new System.Windows.Forms.Button();
+            this.LeftFilesList = new System.Windows.Forms.ListBox();
+            this.RightFilesList = new System.Windows.Forms.ListBox();
+            this.RightCopyButton = new System.Windows.Forms.Button();
+            this.RightMoveButton = new System.Windows.Forms.Button();
+            this.RightDeleteButton = new System.Windows.Forms.Button();
+            this.RightFolderLabel = new System.Windows.Forms.Label();
+            this.RightFolderBrowserButton = new System.Windows.Forms.Button();
+            this.LeftFolderName = new System.Windows.Forms.TextBox();
+            this.RightFolderName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // leftCopyButton
+            // LeftCopyButton
             // 
-            this.leftCopyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftCopyButton.Location = new System.Drawing.Point(15, 13);
-            this.leftCopyButton.Name = "leftCopyButton";
-            this.leftCopyButton.Size = new System.Drawing.Size(87, 23);
-            this.leftCopyButton.TabIndex = 0;
-            this.leftCopyButton.Text = "COPY";
-            this.leftCopyButton.UseVisualStyleBackColor = true;
+            this.LeftCopyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeftCopyButton.Location = new System.Drawing.Point(15, 13);
+            this.LeftCopyButton.Name = "LeftCopyButton";
+            this.LeftCopyButton.Size = new System.Drawing.Size(87, 23);
+            this.LeftCopyButton.TabIndex = 0;
+            this.LeftCopyButton.Text = "COPY";
+            this.LeftCopyButton.UseVisualStyleBackColor = true;
             // 
-            // leftMoveButton
+            // LeftMoveButton
             // 
-            this.leftMoveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftMoveButton.Location = new System.Drawing.Point(108, 13);
-            this.leftMoveButton.Name = "leftMoveButton";
-            this.leftMoveButton.Size = new System.Drawing.Size(87, 23);
-            this.leftMoveButton.TabIndex = 1;
-            this.leftMoveButton.Text = "MOVE";
-            this.leftMoveButton.UseVisualStyleBackColor = true;
+            this.LeftMoveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeftMoveButton.Location = new System.Drawing.Point(108, 13);
+            this.LeftMoveButton.Name = "LeftMoveButton";
+            this.LeftMoveButton.Size = new System.Drawing.Size(87, 23);
+            this.LeftMoveButton.TabIndex = 1;
+            this.LeftMoveButton.Text = "MOVE";
+            this.LeftMoveButton.UseVisualStyleBackColor = true;
             // 
-            // leftDeleteButton
+            // LeftDeleteButton
             // 
-            this.leftDeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftDeleteButton.Location = new System.Drawing.Point(204, 13);
-            this.leftDeleteButton.Name = "leftDeleteButton";
-            this.leftDeleteButton.Size = new System.Drawing.Size(87, 23);
-            this.leftDeleteButton.TabIndex = 2;
-            this.leftDeleteButton.Text = "DELETE";
-            this.leftDeleteButton.UseVisualStyleBackColor = true;
+            this.LeftDeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeftDeleteButton.Location = new System.Drawing.Point(204, 13);
+            this.LeftDeleteButton.Name = "LeftDeleteButton";
+            this.LeftDeleteButton.Size = new System.Drawing.Size(87, 23);
+            this.LeftDeleteButton.TabIndex = 2;
+            this.LeftDeleteButton.Text = "DELETE";
+            this.LeftDeleteButton.UseVisualStyleBackColor = true;
+            this.LeftDeleteButton.Click += new System.EventHandler(this.LeftDeleteButton_Click);
             // 
-            // leftFolderLabel
+            // LeftFolderLabel
             // 
-            this.leftFolderLabel.AutoSize = true;
-            this.leftFolderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftFolderLabel.Location = new System.Drawing.Point(12, 39);
-            this.leftFolderLabel.Name = "leftFolderLabel";
-            this.leftFolderLabel.Size = new System.Drawing.Size(99, 16);
-            this.leftFolderLabel.TabIndex = 3;
-            this.leftFolderLabel.Text = "Folder name:";
+            this.LeftFolderLabel.AutoSize = true;
+            this.LeftFolderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeftFolderLabel.Location = new System.Drawing.Point(12, 39);
+            this.LeftFolderLabel.Name = "LeftFolderLabel";
+            this.LeftFolderLabel.Size = new System.Drawing.Size(99, 16);
+            this.LeftFolderLabel.TabIndex = 3;
+            this.LeftFolderLabel.Text = "Folder name:";
             // 
-            // leftFileBrowserButton
+            // LeftFolderBrowserButton
             // 
-            this.leftFileBrowserButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.leftFileBrowserButton.Location = new System.Drawing.Point(262, 36);
-            this.leftFileBrowserButton.Name = "leftFileBrowserButton";
-            this.leftFileBrowserButton.Size = new System.Drawing.Size(29, 23);
-            this.leftFileBrowserButton.TabIndex = 4;
-            this.leftFileBrowserButton.Text = "...";
-            this.leftFileBrowserButton.UseVisualStyleBackColor = true;
-            this.leftFileBrowserButton.Click += new System.EventHandler(this.leftFileBrowserButton_Click);
+            this.LeftFolderBrowserButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeftFolderBrowserButton.Location = new System.Drawing.Point(262, 58);
+            this.LeftFolderBrowserButton.Name = "LeftFolderBrowserButton";
+            this.LeftFolderBrowserButton.Size = new System.Drawing.Size(29, 23);
+            this.LeftFolderBrowserButton.TabIndex = 4;
+            this.LeftFolderBrowserButton.Text = "...";
+            this.LeftFolderBrowserButton.UseVisualStyleBackColor = true;
+            this.LeftFolderBrowserButton.Click += new System.EventHandler(this.LeftFileBrowserButton_Click);
             // 
-            // leftFolderName
+            // LeftFilesList
             // 
-            this.leftFolderName.AutoSize = true;
-            this.leftFolderName.Location = new System.Drawing.Point(117, 41);
-            this.leftFolderName.Name = "leftFolderName";
-            this.leftFolderName.Size = new System.Drawing.Size(41, 13);
-            this.leftFolderName.TabIndex = 5;
-            this.leftFolderName.Text = "label1";
+            this.LeftFilesList.FormattingEnabled = true;
+            this.LeftFilesList.Location = new System.Drawing.Point(15, 87);
+            this.LeftFilesList.Name = "LeftFilesList";
+            this.LeftFilesList.Size = new System.Drawing.Size(276, 277);
+            this.LeftFilesList.TabIndex = 6;
             // 
-            // listBox1
+            // RightFilesList
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(15, 87);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(276, 277);
-            this.listBox1.TabIndex = 6;
+            this.RightFilesList.FormattingEnabled = true;
+            this.RightFilesList.Location = new System.Drawing.Point(749, 87);
+            this.RightFilesList.Name = "RightFilesList";
+            this.RightFilesList.Size = new System.Drawing.Size(276, 277);
+            this.RightFilesList.TabIndex = 7;
+            // 
+            // RightCopyButton
+            // 
+            this.RightCopyButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RightCopyButton.Location = new System.Drawing.Point(749, 13);
+            this.RightCopyButton.Name = "RightCopyButton";
+            this.RightCopyButton.Size = new System.Drawing.Size(87, 23);
+            this.RightCopyButton.TabIndex = 8;
+            this.RightCopyButton.Text = "COPY";
+            this.RightCopyButton.UseVisualStyleBackColor = true;
+            // 
+            // RightMoveButton
+            // 
+            this.RightMoveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RightMoveButton.Location = new System.Drawing.Point(842, 13);
+            this.RightMoveButton.Name = "RightMoveButton";
+            this.RightMoveButton.Size = new System.Drawing.Size(87, 23);
+            this.RightMoveButton.TabIndex = 9;
+            this.RightMoveButton.Text = "MOVE";
+            this.RightMoveButton.UseVisualStyleBackColor = true;
+            // 
+            // RightDeleteButton
+            // 
+            this.RightDeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RightDeleteButton.Location = new System.Drawing.Point(935, 13);
+            this.RightDeleteButton.Name = "RightDeleteButton";
+            this.RightDeleteButton.Size = new System.Drawing.Size(87, 23);
+            this.RightDeleteButton.TabIndex = 10;
+            this.RightDeleteButton.Text = "DELETE";
+            this.RightDeleteButton.UseVisualStyleBackColor = true;
+            // 
+            // RightFolderLabel
+            // 
+            this.RightFolderLabel.AutoSize = true;
+            this.RightFolderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RightFolderLabel.Location = new System.Drawing.Point(746, 43);
+            this.RightFolderLabel.Name = "RightFolderLabel";
+            this.RightFolderLabel.Size = new System.Drawing.Size(99, 16);
+            this.RightFolderLabel.TabIndex = 11;
+            this.RightFolderLabel.Text = "Folder name:";
+            // 
+            // RightFolderBrowserButton
+            // 
+            this.RightFolderBrowserButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RightFolderBrowserButton.Location = new System.Drawing.Point(993, 58);
+            this.RightFolderBrowserButton.Name = "RightFolderBrowserButton";
+            this.RightFolderBrowserButton.Size = new System.Drawing.Size(29, 23);
+            this.RightFolderBrowserButton.TabIndex = 13;
+            this.RightFolderBrowserButton.Text = "...";
+            this.RightFolderBrowserButton.UseVisualStyleBackColor = true;
+            this.RightFolderBrowserButton.Click += new System.EventHandler(this.RightFolderBrowserButton_Click);
+            // 
+            // LeftFolderName
+            // 
+            this.LeftFolderName.Location = new System.Drawing.Point(117, 38);
+            this.LeftFolderName.Name = "LeftFolderName";
+            this.LeftFolderName.ReadOnly = true;
+            this.LeftFolderName.Size = new System.Drawing.Size(174, 20);
+            this.LeftFolderName.TabIndex = 14;
+            // 
+            // RightFolderName
+            // 
+            this.RightFolderName.Location = new System.Drawing.Point(851, 38);
+            this.RightFolderName.Name = "RightFolderName";
+            this.RightFolderName.ReadOnly = true;
+            this.RightFolderName.Size = new System.Drawing.Size(171, 20);
+            this.RightFolderName.TabIndex = 15;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1037, 394);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.leftFolderName);
-            this.Controls.Add(this.leftFileBrowserButton);
-            this.Controls.Add(this.leftFolderLabel);
-            this.Controls.Add(this.leftDeleteButton);
-            this.Controls.Add(this.leftMoveButton);
-            this.Controls.Add(this.leftCopyButton);
+            this.Controls.Add(this.RightFolderName);
+            this.Controls.Add(this.LeftFolderName);
+            this.Controls.Add(this.RightFolderBrowserButton);
+            this.Controls.Add(this.RightFolderLabel);
+            this.Controls.Add(this.RightDeleteButton);
+            this.Controls.Add(this.RightMoveButton);
+            this.Controls.Add(this.RightCopyButton);
+            this.Controls.Add(this.RightFilesList);
+            this.Controls.Add(this.LeftFilesList);
+            this.Controls.Add(this.LeftFolderBrowserButton);
+            this.Controls.Add(this.LeftFolderLabel);
+            this.Controls.Add(this.LeftDeleteButton);
+            this.Controls.Add(this.LeftMoveButton);
+            this.Controls.Add(this.LeftCopyButton);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainWindow";
             this.Text = "Main Window";
@@ -127,12 +208,19 @@
 
         #endregion
 
-        private System.Windows.Forms.Button leftCopyButton;
-        private System.Windows.Forms.Button leftMoveButton;
-        private System.Windows.Forms.Button leftDeleteButton;
-        private System.Windows.Forms.Label leftFolderLabel;
-        private System.Windows.Forms.Button leftFileBrowserButton;
-        private System.Windows.Forms.Label leftFolderName;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button LeftCopyButton;
+        private System.Windows.Forms.Button LeftMoveButton;
+        private System.Windows.Forms.Button LeftDeleteButton;
+        private System.Windows.Forms.Label LeftFolderLabel;
+        private System.Windows.Forms.Button LeftFolderBrowserButton;
+        private System.Windows.Forms.ListBox LeftFilesList;
+        private System.Windows.Forms.ListBox RightFilesList;
+        private System.Windows.Forms.Button RightCopyButton;
+        private System.Windows.Forms.Button RightMoveButton;
+        private System.Windows.Forms.Button RightDeleteButton;
+        private System.Windows.Forms.Label RightFolderLabel;
+        private System.Windows.Forms.Button RightFolderBrowserButton;
+        private System.Windows.Forms.TextBox LeftFolderName;
+        private System.Windows.Forms.TextBox RightFolderName;
     }
 }

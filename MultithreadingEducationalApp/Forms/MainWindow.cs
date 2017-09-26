@@ -10,24 +10,38 @@ namespace MultithreadingEducationalApp
             InitializeComponent();
         }
 
-        private void leftFileBrowserButton_Click(object sender, System.EventArgs e)
+        private void LeftFileBrowserButton_Click(object sender, System.EventArgs e)
         {
             var folderBrowser = new FolderBrowserDialog();
             folderBrowser.ShowDialog();
-            var path = folderBrowser.SelectedPath;
-            leftFolderName.Text = path;
 
-            GetAllFiles(path);
+            var path = folderBrowser.SelectedPath;
+
+            LeftFolderName.Text = path;
+
+            GetAllFiles(path, LeftFilesList);
         }
 
-        private void GetAllFiles(string path)
+        private void RightFolderBrowserButton_Click(object sender, System.EventArgs e)
+        {
+            var folderBrowser = new FolderBrowserDialog();
+            folderBrowser.ShowDialog();
+
+            var path = folderBrowser.SelectedPath;
+
+            RightFolderName.Text = path;
+
+            GetAllFiles(path, RightFilesList);
+        }
+
+        private void GetAllFiles(string path, ListBox listBox)
         {
             var folder = new DirectoryInfo(path);
             var files = folder.GetFiles();
 
             foreach (var file in files)
             {
-                listBox1.Items.Add(file.Name);
+                listBox.Items.Add(file.Name);
             }
         }
     }
