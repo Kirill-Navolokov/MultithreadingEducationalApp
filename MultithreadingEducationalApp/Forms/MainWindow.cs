@@ -39,8 +39,7 @@ namespace MultithreadingEducationalApp
 	        var fileName = LeftFilesList.SelectedItem.ToString();
 	        var sourceDirectory = LeftFolderName.Text;
 	        var sourcePath = Path.Combine(sourceDirectory, fileName);
-
-
+			
 			var targetDirectory = RightFolderName.Text;
 	        var targetPath = Path.Combine(targetDirectory, fileName);
 
@@ -54,8 +53,7 @@ namespace MultithreadingEducationalApp
 			var fileName = RightFilesList.SelectedItem.ToString();
 			var sourceDirectory = RightFolderName.Text;
 			var sourcePath = Path.Combine(sourceDirectory, fileName);
-
-
+			
 			var targetDirectory = LeftFolderName.Text;
 			var targetPath = Path.Combine(targetDirectory, fileName);
 
