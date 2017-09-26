@@ -33,16 +33,58 @@ namespace MultithreadingEducationalApp
 
             GetAllFiles(path, RightFilesList);
         }
-
-        private void GetAllFiles(string path, ListBox listBox)
+		
+        private void LeftCopyButton_Click(object sender, System.EventArgs e)
         {
-            var folder = new DirectoryInfo(path);
-            var files = folder.GetFiles();
+	        var fileName = LeftFilesList.SelectedItem.ToString();
+	        var sourceDirectory = LeftFolderName.Text;
+	        var sourcePath = Path.Combine(sourceDirectory, fileName);
 
-            foreach (var file in files)
-            {
-                listBox.Items.Add(file.Name);
-            }
-        }
-    }
+
+			var targetDirectory = RightFolderName.Text;
+	        var targetPath = Path.Combine(targetDirectory, fileName);
+
+			CopyFile(sourcePath, targetPath);
+
+	        ReloadFileListWindow(RightFolderName.Text, RightFilesList);
+		}
+		
+		private void RightCopyButton_Click(object sender, System.EventArgs e)
+		{
+			var fileName = RightFilesList.SelectedItem.ToString();
+			var sourceDirectory = RightFolderName.Text;
+			var sourcePath = Path.Combine(sourceDirectory, fileName);
+
+
+			var targetDirectory = LeftFolderName.Text;
+			var targetPath = Path.Combine(targetDirectory, fileName);
+
+			CopyFile(sourcePath, targetPath);
+
+			ReloadFileListWindow(LeftFolderName.Text, LeftFilesList);
+		}
+
+	    private void CopyFile(string sourcePath, string targetPath)
+	    {
+		    File.Copy(sourcePath, targetPath, true);
+	    }
+
+	    private void ReloadFileListWindow(string directoryPath, ListBox requiredListBox)
+	    {
+			requiredListBox.Items.Clear();
+
+			GetAllFiles(directoryPath, requiredListBox);
+	    }
+
+	    private void GetAllFiles(string path, ListBox listBox)
+	    {
+		    var folder = new DirectoryInfo(path);
+		    var files = folder.GetFiles();
+
+		    foreach (var file in files)
+		    {
+			    listBox.Items.Add(file.Name);
+		    }
+	    }
+	}
 }
