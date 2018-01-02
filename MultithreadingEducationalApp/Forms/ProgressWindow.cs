@@ -7,87 +7,109 @@ using MultithreadingEducationalApp.Entities;
 
 namespace MultithreadingEducationalApp.Forms
 {
-	public partial class ProgressWindow : Form
-	{
-		private Thread _mainThread;
-		private readonly EventWaitHandle _waitHandle;
+    public partial class ProgressWindow : Form
+    {
+        private Thread _mainThread;
 
-		public ProgressWindow(string sourceFilePath, string targetFilePath)
-		{
-			InitializeComponent();
+        private readonly EventWaitHandle _waitHandle;
 
-			_waitHandle = new ManualResetEvent(initialState: true);
+        private string _sourceFilePath;
 
-			PerformDataTransfer(sourceFilePath, targetFilePath);
-		}
+        private string _targetFilePath;
 
-		private void PauseButton_Click(object sender, EventArgs e)
-		{
-			_waitHandle.Reset();
-		}
+        public ProgressWindow(string sourceFilePath, string targetFilePath)
+        {
+            InitializeComponent();
 
-		private void ContinueButton_Click(object sender, EventArgs e)
-		{
-			_waitHandle.Set();
-		}
+            _waitHandle = new ManualResetEvent(initialState: true);
 
-		private DataTransferObject PerformDataTransfer(string sourceFilePath, string targetFilePath)
-		{
-			var dataTransferObject = new DataTransferObject();
+            _sourceFilePath = sourceFilePath;
+            _targetFilePath = targetFilePath;
+        }
 
-			try
-			{
-				var fileBytes = File.ReadAllBytes(sourceFilePath);
-				var transfersCount = fileBytes.Length / dataTransferObject.BytesAmountPerIteration;
+        private void PauseButton_Click(object sender, EventArgs e)
+        {
+            _waitHandle.Reset();
+        }
 
-				for (var i = 0; i < transfersCount; i++)
-				{
-					var startIndex = dataTransferObject.EndByte.Index + 1;
-					dataTransferObject.SetTransferParameters(fileBytes, startIndex);
+        private void ContinueButton_Click(object sender, EventArgs e)
+        {
+            _waitHandle.Set();
+        }
 
-					if (dataTransferObject.Bytes.Length == 0)
-					{
-						dataTransferObject.Status = TransferStatus.Success;
+        public TransferStatus PerformDataTransfer()
+        {
+            var dataTransferObject = new DataTransferObject();
 
-						return dataTransferObject;
-					}
+            try
+            {
+                var fileBytes = File.ReadAllBytes(_sourceFilePath);
+                dataTransferObject.BytesAmountPerTransfer = (int)Math.Ceiling((double)fileBytes.Length / ProgressBar.Step);
 
-					dataTransferObject = TransferData(dataTransferObject);
+                for (var i = 0; i < ProgressBar.Step; i++)
+                {
+                    var startIndex = i == 0 ? 0 : dataTransferObject.EndByte.Index + 1;
+                    dataTransferObject.SetTransferParameters(fileBytes, startIndex);
 
-					if (dataTransferObject.Status == TransferStatus.Failed)
-					{
-						return dataTransferObject;
-					}
+                    dataTransferObject = TransferData(_targetFilePath, dataTransferObject);
 
-					ProgressBar.PerformStep();
-					Thread.Sleep(2000);
-				}
-			}
-			catch (Exception e)
-			{
-				dataTransferObject.Status = TransferStatus.Failed;
+                    if (CheckForOperationError(dataTransferObject.Status))
+                    {
+                        return dataTransferObject.Status;
+                    }
 
-				return dataTransferObject;
-			}
+                    ProgressBar.PerformStep();
 
-			dataTransferObject.Status = TransferStatus.Success;
+                    if (CheckForOperationSuccess(dataTransferObject))
+                    {
+                        return dataTransferObject.Status;
+                    }
+                    
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception e)
+            {
+                dataTransferObject.Status = TransferStatus.Failed;
+            }
 
-			return dataTransferObject;
-		}
+            dataTransferObject.Status = TransferStatus.Success;
 
-		private DataTransferObject TransferData(DataTransferObject dataTransferObject)
-		{
-			try
-			{
+            return dataTransferObject.Status;
+        }
 
-			}
-			catch (Exception e)
-			{
-				dataTransferObject.Status = TransferStatus.Failed;
+        private DataTransferObject TransferData(string targetFilePath, DataTransferObject dataTransferObject)
+        {
+            try
+            {
+                using (var stream = new FileStream(targetFilePath, FileMode.Append))
+                {
+                    stream.Write(dataTransferObject.Bytes, 0, dataTransferObject.Bytes.Length);
+                }
+            }
+            catch (Exception e)
+            {
+                dataTransferObject.Status = TransferStatus.Failed;
+            }
 
-				return dataTransferObject;
-			}
-			return dataTransferObject;
-		}
-	}
+            return dataTransferObject;
+        }
+
+        private bool CheckForOperationError(TransferStatus status)
+        {
+            return status == TransferStatus.Failed;
+        }
+
+        private bool CheckForOperationSuccess(DataTransferObject dataTransferObject)
+        {
+            if (dataTransferObject.Bytes.Length < dataTransferObject.BytesAmountPerTransfer)
+            {
+                dataTransferObject.Status = TransferStatus.Success;
+
+                return true;
+            }
+
+            return false;
+        }
+    }
 }

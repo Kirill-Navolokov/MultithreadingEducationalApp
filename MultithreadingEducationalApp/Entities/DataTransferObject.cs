@@ -6,9 +6,10 @@ namespace MultithreadingEducationalApp.Entities
 {
 	public class DataTransferObject
 	{
-		public DataTransferObject()
+        private int _bytesAmountPerTransfer;
+
+        public DataTransferObject()
 		{
-			Bytes = new byte[BytesAmountPerIteration];
 			Status = TransferStatus.InProgress;
 			StartByte = new ByteInfo { Index = 0 };
 			EndByte = new ByteInfo { Index = 0};
@@ -18,21 +19,40 @@ namespace MultithreadingEducationalApp.Entities
 
 		public TransferStatus Status { get; set; }
 
-		public long BytesAmountPerIteration { get; private set; }
+        public int BytesAmountPerTransfer
+        {
+            get
+            {
+                return _bytesAmountPerTransfer;
+            }
+            set
+            {
+                _bytesAmountPerTransfer = value;
+                Bytes = new byte[_bytesAmountPerTransfer];
+            }
+        }
 
-		public ByteInfo StartByte { get; private set; }
+        public ByteInfo StartByte { get; private set; }
 
 		public ByteInfo EndByte { get; private set; }
 
 		public void SetTransferParameters(byte[] sourceBytes, long startIndex)
 		{
-			Array.Copy(sourceBytes, startIndex, Bytes, 0, BytesAmountPerIteration);
-
-			StartByte.Index = startIndex;
+            if (sourceBytes.Length - startIndex > BytesAmountPerTransfer)
+            {
+                Array.Copy(sourceBytes, startIndex, Bytes, 0, BytesAmountPerTransfer);
+            }
+            else
+            {
+                Bytes = new byte[sourceBytes.Length - startIndex];
+                Array.Copy(sourceBytes, startIndex, Bytes, 0, Bytes.Length);
+            }
+            
+            StartByte.Index = startIndex;
 			StartByte.Value = sourceBytes[startIndex];
 
 			EndByte.Value = Bytes.Last();
-			EndByte.Index = startIndex + BytesAmountPerIteration;
+			EndByte.Index = startIndex + Bytes.Length;
 		}
 	}
 }
