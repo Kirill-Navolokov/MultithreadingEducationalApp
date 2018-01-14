@@ -1,115 +1,118 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using MultithreadingEducationalApp.Constants;
-using MultithreadingEducationalApp.Entities;
+using MultithreadingEducationalApp.Interfaces;
+using MultithreadingEducationalApp.IoC;
 
 namespace MultithreadingEducationalApp.Forms
 {
     public partial class ProgressWindow : Form
     {
-        private Thread _mainThread;
-
-        private readonly EventWaitHandle _waitHandle;
-
         private string _sourceFilePath;
 
         private string _targetFilePath;
+        
+        private string _folderToReset;
+        
+        private ListBox _listBoxToReset;
 
+        private BackgroundWorker _worker;
+
+        private TransferStatus _operationStatus;
+
+        private readonly ManualResetEvent _locker;
+
+        private Action<string, ListBox> _resetAction;
+        
+        private readonly IDataTransferer _dataTransferer;
+        
         public ProgressWindow(string sourceFilePath, string targetFilePath)
         {
             InitializeComponent();
 
-            _waitHandle = new ManualResetEvent(initialState: true);
-
             _sourceFilePath = sourceFilePath;
             _targetFilePath = targetFilePath;
+
+            _dataTransferer = IoCInitializer.Resolve<IDataTransferer>();
+            
+            _locker = new ManualResetEvent(initialState: true);
+
+            SetUpBackgroundWorker();
+        }
+
+        public void SetUpResetAction(string folderToReset, ListBox listBoxToReset, Action<string, ListBox> resetAction)
+        {
+            _folderToReset = folderToReset;
+            _listBoxToReset = listBoxToReset;
+            _resetAction = resetAction;
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            _worker.RunWorkerAsync();
+        }
+
+        private void SetUpBackgroundWorker()
+        {
+            _worker = new BackgroundWorker();
+            _worker.DoWork += WorkerDoWork;
+            _worker.WorkerReportsProgress = true;
+            _worker.ProgressChanged += WorkerProgressChanged;
+            _worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
+        }
+
+        private void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            TransferSettings.UnRegisterOperation(_targetFilePath);
+
+            if (_operationStatus == TransferStatus.Success)
+            {
+                _resetAction?.Invoke(_folderToReset, _listBoxToReset);
+                this.Close();
+            }
+            else
+            {
+                if (MessageBox.Show("Try again", "Operation failed", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
+                {
+                    _worker.RunWorkerAsync();
+                }
+                else
+                {
+                    File.Delete(_targetFilePath);
+                    this.Close();
+                }
+            }
+        }
+
+        private void WorkerDoWork(object sender, DoWorkEventArgs e)
+        {
+            if (TransferSettings.IsDataTransferAllowed)
+            {
+                _operationStatus = _dataTransferer.PerformDataTransfer(_sourceFilePath, _targetFilePath, ProgressBar.Step, _worker, _locker);
+            }
+            else
+            {
+                MessageBox.Show("All threads are busy at the moment");
+            }
+        }
+
+        private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            ProgressBar.PerformStep();
         }
 
         private void PauseButton_Click(object sender, EventArgs e)
         {
-            _waitHandle.Reset();
+            _locker.Reset();
         }
 
         private void ContinueButton_Click(object sender, EventArgs e)
         {
-            _waitHandle.Set();
-        }
-
-        public TransferStatus PerformDataTransfer()
-        {
-            var dataTransferObject = new DataTransferObject();
-
-            try
-            {
-                var fileBytes = File.ReadAllBytes(_sourceFilePath);
-                dataTransferObject.BytesAmountPerTransfer = (int)Math.Ceiling((double)fileBytes.Length / ProgressBar.Step);
-
-                for (var i = 0; i < ProgressBar.Step; i++)
-                {
-                    var startIndex = i == 0 ? 0 : dataTransferObject.EndByte.Index + 1;
-                    dataTransferObject.SetTransferParameters(fileBytes, startIndex);
-
-                    dataTransferObject = TransferData(_targetFilePath, dataTransferObject);
-
-                    if (CheckForOperationError(dataTransferObject.Status))
-                    {
-                        return dataTransferObject.Status;
-                    }
-
-                    ProgressBar.PerformStep();
-
-                    if (CheckForOperationSuccess(dataTransferObject))
-                    {
-                        return dataTransferObject.Status;
-                    }
-                    
-                    Thread.Sleep(1000);
-                }
-            }
-            catch (Exception e)
-            {
-                dataTransferObject.Status = TransferStatus.Failed;
-            }
-
-            dataTransferObject.Status = TransferStatus.Success;
-
-            return dataTransferObject.Status;
-        }
-
-        private DataTransferObject TransferData(string targetFilePath, DataTransferObject dataTransferObject)
-        {
-            try
-            {
-                using (var stream = new FileStream(targetFilePath, FileMode.Append))
-                {
-                    stream.Write(dataTransferObject.Bytes, 0, dataTransferObject.Bytes.Length);
-                }
-            }
-            catch (Exception e)
-            {
-                dataTransferObject.Status = TransferStatus.Failed;
-            }
-
-            return dataTransferObject;
-        }
-
-        private bool CheckForOperationError(TransferStatus status)
-        {
-            return status == TransferStatus.Failed;
-        }
-
-        private bool CheckForOperationSuccess(DataTransferObject dataTransferObject)
-        {
-            if (dataTransferObject.Bytes.Length < dataTransferObject.BytesAmountPerTransfer)
-            {
-                dataTransferObject.Status = TransferStatus.Success;
-
-                return true;
-            }
-
-            return false;
+            _locker.Set();
         }
     }
 }

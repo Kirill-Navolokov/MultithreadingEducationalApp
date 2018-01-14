@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,8 +65,15 @@
     <Compile Include="Forms\ProgressWindow.Designer.cs">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\DataTransferer.cs" />
+    <Compile Include="Implementation\FileProvider.cs" />
+    <Compile Include="Interfaces\IDataTransferer.cs" />
+    <Compile Include="Interfaces\IFileProvider.cs" />
+    <Compile Include="IoC\IoCInitializer.cs" />
+    <Compile Include="IoC\NinjectModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransferSettings.cs" />
     <EmbeddedResource Include="Forms\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -78,6 +89,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

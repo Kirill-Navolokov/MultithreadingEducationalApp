@@ -1,15 +1,18 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MultithreadingEducationalApp.Constants;
 using MultithreadingEducationalApp.Forms;
+using MultithreadingEducationalApp.Interfaces;
 
 namespace MultithreadingEducationalApp
 {
     public partial class MainWindow : Form
     {
-        public MainWindow()
+        private readonly IFileProvider _fileProvider;
+
+        public MainWindow(IFileProvider fileProvider)
         {
+            _fileProvider = fileProvider;
+
             InitializeComponent();
         }
 
@@ -18,11 +21,11 @@ namespace MultithreadingEducationalApp
             var folderBrowser = new FolderBrowserDialog();
             folderBrowser.ShowDialog();
 
-            var path = folderBrowser.SelectedPath;
+            var targetPath = folderBrowser.SelectedPath;
 
-            LeftFolderName.Text = path;
-
-            GetAllFiles(path, LeftFilesList);
+            LeftFolderName.Text = targetPath;
+            
+            ResetTargetFolder(targetPath, LeftFilesList);
         }
 
         private void RightFolderBrowserButton_Click(object sender, System.EventArgs e)
@@ -30,25 +33,28 @@ namespace MultithreadingEducationalApp
             var folderBrowser = new FolderBrowserDialog();
             folderBrowser.ShowDialog();
 
-            var path = folderBrowser.SelectedPath;
+            var targetPath = folderBrowser.SelectedPath;
 
-            RightFolderName.Text = path;
+            RightFolderName.Text = targetPath;
 
-            GetAllFiles(path, RightFilesList);
+            ResetTargetFolder(targetPath, RightFilesList);
         }
 
         private void LeftCopyButton_Click(object sender, System.EventArgs e)
         {
-            var fileName = LeftFilesList.SelectedItem.ToString();
-            var sourceDirectory = LeftFolderName.Text;
-            var sourcePath = Path.Combine(sourceDirectory, fileName);
+            var selectedFile = LeftFilesList.SelectedItem;
 
-            var targetDirectory = RightFolderName.Text;
-            var targetPath = Path.Combine(targetDirectory, fileName);
+            if (selectedFile != null)
+            {
+                var fileName = selectedFile.ToString();
+                var sourceDirectory = LeftFolderName.Text;
+                var sourcePath = Path.Combine(sourceDirectory, fileName);
 
-            CopyFile(sourcePath, targetPath);
-
-            ReloadFileListWindow(RightFolderName.Text, RightFilesList);
+                var targetDirectory = RightFolderName.Text;
+                var targetPath = Path.Combine(targetDirectory, fileName);
+                
+                CopyFile(sourcePath, targetPath, RightFolderName.Text, RightFilesList);
+            }
         }
 
         private void RightCopyButton_Click(object sender, System.EventArgs e)
@@ -60,39 +66,36 @@ namespace MultithreadingEducationalApp
             var targetDirectory = LeftFolderName.Text;
             var targetPath = Path.Combine(targetDirectory, fileName);
 
-            CopyFile(sourcePath, targetPath);
+            //CopyFile(sourcePath, targetPath);
 
-            ReloadFileListWindow(LeftFolderName.Text, LeftFilesList);
+            _fileProvider.SetListBoxContent(LeftFolderName.Text, LeftFilesList);
         }
 
-        private void CopyFile(string sourcePath, string targetPath)
+        private void CopyFile(string sourcePath, string targetPath, string folderToReset, ListBox listBoxToReset)
         {
-            var operationProgress = new ProgressWindow(sourcePath, targetPath);
-            operationProgress.Show();
-            var result = operationProgress.PerformDataTransfer();
+            var operationWindow = new ProgressWindow(sourcePath, targetPath);
+            operationWindow.SetUpResetAction(folderToReset, listBoxToReset, ResetTargetFolder);
+            operationWindow.Show();
+        }
 
-            if (result == TransferStatus.Success)
+        private void RightDeleteButton_Click(object sender, System.EventArgs e)
+        {
+            var selectedFile = RightFilesList.SelectedItem;
+
+            if (selectedFile != null)
             {
-                operationProgress.Close();
+                var fileName = selectedFile.ToString();
+                var sourceDirectory = RightFolderName.Text;
+                var sourcePath = Path.Combine(sourceDirectory, fileName);
+
+                File.Delete(sourcePath);
+                _fileProvider.SetListBoxContent(RightFolderName.Text, RightFilesList);
             }
         }
-
-        private void ReloadFileListWindow(string directoryPath, ListBox requiredListBox)
+        
+        private void ResetTargetFolder(string targerDirectory, ListBox targetListBox)
         {
-            requiredListBox.Items.Clear();
-
-            GetAllFiles(directoryPath, requiredListBox);
-        }
-
-        private void GetAllFiles(string path, ListBox listBox)
-        {
-            var folder = new DirectoryInfo(path);
-            var files = folder.GetFiles();
-
-            foreach (var file in files)
-            {
-                listBox.Items.Add(file.Name);
-            }
+            _fileProvider.SetListBoxContent(targerDirectory, targetListBox);
         }
     }
 }

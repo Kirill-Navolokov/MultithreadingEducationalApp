@@ -30,7 +30,6 @@
 		{
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.ProgressLabel = new System.Windows.Forms.Label();
-            this.CancelButton = new System.Windows.Forms.Button();
             this.PauseButton = new System.Windows.Forms.Button();
             this.ContinueButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -51,20 +50,11 @@
             this.ProgressLabel.TabIndex = 1;
             this.ProgressLabel.Text = "PROGRESS";
             // 
-            // CancelButton
-            // 
-            this.CancelButton.Location = new System.Drawing.Point(12, 73);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton.TabIndex = 2;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            // 
             // PauseButton
             // 
-            this.PauseButton.Location = new System.Drawing.Point(93, 73);
+            this.PauseButton.Location = new System.Drawing.Point(12, 73);
             this.PauseButton.Name = "PauseButton";
-            this.PauseButton.Size = new System.Drawing.Size(75, 23);
+            this.PauseButton.Size = new System.Drawing.Size(118, 23);
             this.PauseButton.TabIndex = 3;
             this.PauseButton.Text = "Pause";
             this.PauseButton.UseVisualStyleBackColor = true;
@@ -72,9 +62,9 @@
             // 
             // ContinueButton
             // 
-            this.ContinueButton.Location = new System.Drawing.Point(174, 73);
+            this.ContinueButton.Location = new System.Drawing.Point(136, 73);
             this.ContinueButton.Name = "ContinueButton";
-            this.ContinueButton.Size = new System.Drawing.Size(75, 23);
+            this.ContinueButton.Size = new System.Drawing.Size(113, 23);
             this.ContinueButton.TabIndex = 4;
             this.ContinueButton.Text = "Continue";
             this.ContinueButton.UseVisualStyleBackColor = true;
@@ -87,7 +77,6 @@
             this.ClientSize = new System.Drawing.Size(264, 117);
             this.Controls.Add(this.ContinueButton);
             this.Controls.Add(this.PauseButton);
-            this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ProgressLabel);
             this.Controls.Add(this.ProgressBar);
             this.Name = "ProgressWindow";
@@ -101,7 +90,6 @@
 
 		private System.Windows.Forms.ProgressBar ProgressBar;
 		private System.Windows.Forms.Label ProgressLabel;
-		private System.Windows.Forms.Button CancelButton;
 		private System.Windows.Forms.Button PauseButton;
 		private System.Windows.Forms.Button ContinueButton;
 	}

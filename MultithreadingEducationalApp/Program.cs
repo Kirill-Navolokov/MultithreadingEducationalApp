@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using MultithreadingEducationalApp.IoC;
 
 namespace MultithreadingEducationalApp
 {
@@ -11,9 +12,11 @@ namespace MultithreadingEducationalApp
         [STAThread]
         static void Main()
         {
+            IoCInitializer.Initizlize(new ApplicationModule());
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            Application.Run(IoCInitializer.Resolve<MainWindow>());
         }
     }
 }
