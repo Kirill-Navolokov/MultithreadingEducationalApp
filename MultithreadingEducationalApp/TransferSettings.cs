@@ -26,6 +26,6 @@ namespace MultithreadingEducationalApp
             }
         }
 
-        public static bool IsDataTransferAllowed => _files.Count == MaxTransfersCount;
+        public static bool IsDataTransferAllowed => _files.Count <= MaxTransfersCount;
     }
 }

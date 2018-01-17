@@ -28,6 +28,8 @@ namespace MultithreadingEducationalApp.Forms
         private Action<string, ListBox> _resetAction;
         
         private readonly IDataTransferer _dataTransferer;
+
+        private readonly IFileProvider _fileProvider;
         
         public ProgressWindow(string sourceFilePath, string targetFilePath)
         {
@@ -37,6 +39,8 @@ namespace MultithreadingEducationalApp.Forms
             _targetFilePath = targetFilePath;
 
             _dataTransferer = IoCInitializer.Resolve<IDataTransferer>();
+
+            _fileProvider = IoCInitializer.Resolve<IFileProvider>();
             
             _locker = new ManualResetEvent(initialState: true);
 
@@ -72,7 +76,9 @@ namespace MultithreadingEducationalApp.Forms
             if (_operationStatus == TransferStatus.Success)
             {
                 _resetAction?.Invoke(_folderToReset, _listBoxToReset);
-                this.Close();
+                Close();
+
+                _fileProvider.SimalateUsersCalculationHash(_targetFilePath);
             }
             else
             {

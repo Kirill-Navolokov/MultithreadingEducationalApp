@@ -5,5 +5,7 @@ namespace MultithreadingEducationalApp.Interfaces
     public interface IFileProvider
     {
         void SetListBoxContent(string directoryPath, ListBox listBox);
+
+        void SimalateUsersCalculationHash(string filePath);
     }
 }
