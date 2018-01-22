@@ -18,22 +18,16 @@ namespace MultithreadingEducationalApp
 
         private void LeftFileBrowserButton_Click(object sender, System.EventArgs e)
         {
-            var folderBrowser = new FolderBrowserDialog();
-            folderBrowser.ShowDialog();
-
-            var targetPath = folderBrowser.SelectedPath;
+            var targetPath = GetTargetPathFromDialog();
 
             LeftFolderName.Text = targetPath;
-            
+
             ResetTargetFolder(targetPath, LeftFilesList);
         }
 
         private void RightFolderBrowserButton_Click(object sender, System.EventArgs e)
         {
-            var folderBrowser = new FolderBrowserDialog();
-            folderBrowser.ShowDialog();
-
-            var targetPath = folderBrowser.SelectedPath;
+            var targetPath = GetTargetPathFromDialog();
 
             RightFolderName.Text = targetPath;
 
@@ -47,35 +41,13 @@ namespace MultithreadingEducationalApp
             if (selectedFile != null)
             {
                 var fileName = selectedFile.ToString();
-                var sourceDirectory = LeftFolderName.Text;
-                var sourcePath = Path.Combine(sourceDirectory, fileName);
+                var sourcePath = GetSourcePath(selectedFile);
 
                 var targetDirectory = RightFolderName.Text;
                 var targetPath = Path.Combine(targetDirectory, fileName);
-                
+
                 CopyFile(sourcePath, targetPath, RightFolderName.Text, RightFilesList);
             }
-        }
-
-        private void RightCopyButton_Click(object sender, System.EventArgs e)
-        {
-            var fileName = RightFilesList.SelectedItem.ToString();
-            var sourceDirectory = RightFolderName.Text;
-            var sourcePath = Path.Combine(sourceDirectory, fileName);
-
-            var targetDirectory = LeftFolderName.Text;
-            var targetPath = Path.Combine(targetDirectory, fileName);
-
-            //CopyFile(sourcePath, targetPath);
-
-            _fileProvider.SetListBoxContent(LeftFolderName.Text, LeftFilesList);
-        }
-
-        private void CopyFile(string sourcePath, string targetPath, string folderToReset, ListBox listBoxToReset)
-        {
-            var operationWindow = new ProgressWindow(sourcePath, targetPath);
-            operationWindow.SetUpResetAction(folderToReset, listBoxToReset, ResetTargetFolder);
-            operationWindow.Show();
         }
 
         private void RightDeleteButton_Click(object sender, System.EventArgs e)
@@ -84,18 +56,42 @@ namespace MultithreadingEducationalApp
 
             if (selectedFile != null)
             {
-                var fileName = selectedFile.ToString();
-                var sourceDirectory = RightFolderName.Text;
-                var sourcePath = Path.Combine(sourceDirectory, fileName);
+                var sourcePath = GetSourcePath(selectedFile);
 
                 File.Delete(sourcePath);
-                _fileProvider.SetListBoxContent(RightFolderName.Text, RightFilesList);
+                ResetTargetFolder(RightFolderName.Text, RightFilesList);
             }
         }
-        
+
+        private void CopyFile(string sourcePath, string targetPath, string folderToReset, ListBox listBoxToReset)
+        {
+            var operationWindow = new ProgressWindow(sourcePath, targetPath);
+            operationWindow.SetUpResetAction(folderToReset, listBoxToReset, ResetTargetFolder);
+
+            operationWindow.Show();
+        }
+
         private void ResetTargetFolder(string targerDirectory, ListBox targetListBox)
         {
             _fileProvider.SetListBoxContent(targerDirectory, targetListBox);
+        }
+
+        private string GetSourcePath(object selectedFile)
+        {
+            var fileName = selectedFile.ToString();
+            var sourceDirectory = RightFolderName.Text;
+            var sourcePath = Path.Combine(sourceDirectory, fileName);
+
+            return sourcePath;
+
+        }
+
+        private string GetTargetPathFromDialog()
+        {
+            var folderBrowser = new FolderBrowserDialog();
+            folderBrowser.ShowDialog();
+
+            return folderBrowser.SelectedPath;
         }
     }
 }
