@@ -79,7 +79,7 @@ namespace MultithreadingEducationalApp
         private string GetSourcePath(object selectedFile)
         {
             var fileName = selectedFile.ToString();
-            var sourceDirectory = RightFolderName.Text;
+            var sourceDirectory = LeftFolderName.Text;
             var sourcePath = Path.Combine(sourceDirectory, fileName);
 
             return sourcePath;
