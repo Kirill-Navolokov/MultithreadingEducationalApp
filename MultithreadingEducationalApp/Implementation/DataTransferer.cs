@@ -51,6 +51,8 @@ namespace MultithreadingEducationalApp.Implementation
 
                 return dataTransferObject.Status;
             }
+
+            return dataTransferObject.Status;
         }
 
         private bool CheckForOperationError(TransferStatus status)
