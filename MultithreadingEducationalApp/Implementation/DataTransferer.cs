@@ -48,11 +48,9 @@ namespace MultithreadingEducationalApp.Implementation
             catch (Exception e)
             {
                 dataTransferObject.Status = TransferStatus.Failed;
+
+                return dataTransferObject.Status;
             }
-
-            dataTransferObject.Status = TransferStatus.Success;
-
-            return dataTransferObject.Status;
         }
 
         private bool CheckForOperationError(TransferStatus status)
